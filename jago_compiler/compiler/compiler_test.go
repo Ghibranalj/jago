@@ -113,14 +113,15 @@ func TestComplete(t *testing.T) {
 func TestRunJavac(t *testing.T) {
 	path := "./" + progName + ".java"
 	utils.WriteToFile(path,
-		`class Main {
+		`class program {
 		public static void main(String[] argss){		
 			System.out.println("hello World");
-		}
+	}	
 	}`)
 
-	err := javac("./" + progName + ".java")
+	err := javac(path)
 	os.Remove(path)
+	os.Remove("./" + progName + ".class")
 	if err != nil {
 		t.Error(err.Error())
 	}
