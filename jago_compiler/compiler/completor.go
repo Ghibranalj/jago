@@ -11,13 +11,13 @@ func complete(code string, cat int) string {
 		ret = code
 	case MAIN_METHOD:
 		ret = fmt.Sprintf(`
-		class Main {
+		class program {
 			%s
 		}
 		`, code)
 	default: // singleton
 		ret = fmt.Sprintf(`
-	class Main {
+	class program {
 		public static void main(String[] args){		
 			%s
 		}

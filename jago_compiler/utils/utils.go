@@ -1,5 +1,7 @@
 package utils
 
+import "os"
+
 func WriteToFile(path, content string) error {
-	return nil
+	return os.WriteFile(path, []byte(content), 0644)
 }

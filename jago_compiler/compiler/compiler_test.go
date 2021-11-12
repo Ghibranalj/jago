@@ -1,8 +1,11 @@
 package compiler
 
 import (
+	"os"
 	"regexp"
 	"testing"
+
+	"github.com/Ghibranalj/jago/jago_compiler/utils"
 )
 
 type _code struct {
@@ -72,13 +75,13 @@ func TestCategorize(t *testing.T) {
 
 }
 
-var _completeOutput = `class Main {
+var _completeOutput = `class program {
 	public static void main(String[] args){		
 		System.out.println("hello World");
 	}
 }`
 var codeIn = []string{
-	`class Main {
+	`class program {
 		public static void main(String[] args){		
 			System.out.println("hello World");
 		}
@@ -102,13 +105,24 @@ func TestComplete(t *testing.T) {
 		comp := trim(complete(v, i))
 
 		if o != comp {
-			t.Errorf("OWW : %s \n should be: %s \n", comp, o)
+			t.Errorf("%s \n should be: %s \n", comp, o)
 		}
 	}
 }
 
 func TestRunJavac(t *testing.T) {
-	ret := javac("../" + progName + ".java")
+	path := "./" + progName + ".java"
+	utils.WriteToFile(path,
+		`class Main {
+		public static void main(String[] argss){		
+			System.out.println("hello World");
+		}
+	}`)
 
-	t.Log("LOG:", ret)
+	err := javac("./" + progName + ".java")
+	os.Remove(path)
+	if err != nil {
+		t.Error(err.Error())
+	}
+
 }
