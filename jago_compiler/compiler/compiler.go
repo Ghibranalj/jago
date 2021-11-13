@@ -19,19 +19,19 @@ func Compile(code string) (string, error) {
 	_ = cat
 	fileContent := complete(code, cat)
 
+	fileContent = importAll(fileContent)
+
 	javaFile := "./" + progName + ".java"
 	err := utils.WriteToFile(javaFile, fileContent)
 	if err != nil {
+
+		utils.RemoveFile(javaFile)
 		return "", err
 	}
 
 	err = javac(javaFile)
 
-	if err != nil {
-		return "", err
-	}
-
-	err = utils.RemoveFile(javaFile)
+	utils.RemoveFile(javaFile)
 	if err != nil {
 		return "", err
 	}
