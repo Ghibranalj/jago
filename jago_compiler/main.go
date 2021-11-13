@@ -38,8 +38,8 @@ func Code(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&inp)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "400 : %s", err.Error())
-		// w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	code := inp.Code
@@ -47,20 +47,20 @@ func Code(w http.ResponseWriter, r *http.Request) {
 	progName, err := compiler.Compile(code)
 
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "compile error: %s", err.Error())
-		// w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	out, err := execute(progName, inp.Args)
 	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "runtime error: %s", err.Error())
-		// w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	fmt.Fprintf(w, "%s", out)
 	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "%s", out)
 }
 
 func execute(path, args string) (string, error) {
@@ -72,6 +72,6 @@ func execute(path, args string) (string, error) {
 	if err != nil || ext != 0 {
 		return stdout + stderr, err
 	}
-	utils.RemoveFile(path + ".class")
+	// utils.RemoveFile(path + ".class")
 	return stdout + stderr, nil
 }
