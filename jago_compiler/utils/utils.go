@@ -14,7 +14,9 @@ func RemoveFile(path string) error {
 	return os.Remove(path)
 }
 
-// Command run a command
+// Command run a command standard
+//
+// standard output is written to stdout. standard error is written to stderr
 //
 // returns exitcode and error if any
 func Command(cmdstr string, stdout, stderr *string) (int, error) {

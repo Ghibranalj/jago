@@ -15,22 +15,22 @@ type _code struct {
 
 var codes = []_code{
 	{
-		code: `System.out.Println("hello world");`,
+		code: `System.out.println("hello world");`,
 		cat:  SINGLETON,
 	},
 	{
 		code: `
 		public static void main (String[] args) {
-			System.out.Println("hello world");
+			System.out.println("hello world");
 		}`,
 		cat: MAIN_METHOD,
 	},
 	{
 		code: `
-		class TestingClass {
+		class program {
 
 			public static void main (String[] args){
-				System.out.Println("hello world");
+				System.out.println(\"hello world\");
 			}
 		
 		}`,
@@ -39,7 +39,7 @@ var codes = []_code{
 	{
 		code: `
 		public static void main (String[] args) {
-			System.out.Println("hello world");
+			System.out.println("hello world");
 		}`,
 		cat: MAIN_METHOD,
 	},
@@ -47,17 +47,17 @@ var codes = []_code{
 		code: `
 		public static void main (String[] args)
 		{
-			System.out.Println("hello world");
+			System.out.println("hello world");
 		}`,
 		cat: MAIN_METHOD,
 	},
 	{
 		code: `
-		class TestingClass 
+		class program 
 		{
 
 			public static void main (String[] args){
-				System.out.Println("hello world");
+				System.out.println("hello world");
 			}
 		
 		}`,
@@ -125,5 +125,12 @@ func TestRunJavac(t *testing.T) {
 	if err != nil {
 		t.Error(err.Error())
 	}
+}
 
+func TestCompile(t *testing.T) {
+	for _, code := range codes {
+		if _, err := Compile(code.code); err != nil {
+			t.Errorf("%s", err.Error())
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -26,19 +27,51 @@ func Version(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s \n %s", stdout, stderr)
 }
 
-func Code(w http.ResponseWriter, r *http.Request) {
-
-	// get code from request
-	// compile code
-	// 		if error return error message
-	// run program
-	//		if error return error message
-	// return output from program
-
-	compiler.Compile("System.out.println()")
+type input struct {
+	Code string
+	Args string
 }
 
-func execute(path string) (string, error) {
+func Code(w http.ResponseWriter, r *http.Request) {
 
-	return "", nil
+	var inp input
+
+	err := json.NewDecoder(r.Body).Decode(&inp)
+	if err != nil {
+		fmt.Fprintf(w, "400 : %s", err.Error())
+		// w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	code := inp.Code
+
+	progName, err := compiler.Compile(code)
+
+	if err != nil {
+		fmt.Fprintf(w, "compile error: %s", err.Error())
+		// w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	out, err := execute(progName, inp.Args)
+	if err != nil {
+		fmt.Fprintf(w, "runtime error: %s", err.Error())
+		// w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintf(w, "%s", out)
+	w.WriteHeader(http.StatusOK)
+}
+
+func execute(path, args string) (string, error) {
+
+	stdout := ""
+	stderr := ""
+	cmd := "java " + path + args
+	ext, err := utils.Command(cmd, &stdout, &stderr)
+	if err != nil || ext != 0 {
+		return stdout + stderr, err
+	}
+	utils.RemoveFile(path + ".class")
+	return stdout + stderr, nil
 }
