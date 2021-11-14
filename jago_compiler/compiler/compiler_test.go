@@ -134,3 +134,19 @@ func TestCompile(t *testing.T) {
 		}
 	}
 }
+
+func TestGetName(t *testing.T) {
+	c := `
+	class Amazing {
+		Amazing(){
+			System.out.print("hello world");
+	}
+		public static void main( String[] args){
+		var a = new Amazing();
+	}
+	}
+	`
+	if getName(c) != "Amazing" {
+		t.Error("")
+	}
+}

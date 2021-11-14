@@ -6,10 +6,6 @@ import (
 	"github.com/Ghibranalj/jago/jago_compiler/utils"
 )
 
-const (
-	progName = "program"
-)
-
 // Compile compiles code to  a .class file
 //
 // returns path to .class file path and compilation error if any
@@ -18,6 +14,8 @@ func Compile(code string) (string, error) {
 	cat := categorize(code)
 	_ = cat
 	fileContent := complete(code, cat)
+
+	progName := getName(fileContent)
 
 	fileContent = importAll(fileContent)
 
