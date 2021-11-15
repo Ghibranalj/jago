@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/Ghibranalj/jago/jago_bot/dockerctl"
 	"github.com/Ghibranalj/jago/jago_bot/handlers"
 	"github.com/bwmarrin/discordgo"
 )
@@ -16,7 +17,7 @@ var (
 
 func init() {
 	if token == "" {
-		fmt.Fprintln(os.Stderr, "$TOKEN not set")
+		fmt.Fprintln(os.Stderr, "$DISCORD not set")
 		os.Exit(1)
 	}
 }
@@ -24,6 +25,7 @@ func init() {
 func main() {
 
 	dg, err := discordgo.New("Bot " + token)
+	dockerctl.Init()
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error while creating Discord session : %s \n", err.Error())
