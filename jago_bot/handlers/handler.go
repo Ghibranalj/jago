@@ -37,7 +37,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	defer dockerctl.Kill(port, id)
 
 	if err != nil {
-		s.ChannelMessageSend(m.ChannelID, "internal server err:"+err.Error())
+		s.ChannelMessageSendReply(m.ChannelID, "internal server err:"+err.Error(), m.Reference())
 		return
 	}
 	out, err := run(port, code, inp)
@@ -45,7 +45,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if err, ok := err.(net.Error); ok && err.Timeout() {
 			messOut := fmt.Sprintf(" ```\nError: %s\n```", "Your code took too long to execute (max 10s)")
-			s.ChannelMessageSend(m.ChannelID, messOut)
+			s.ChannelMessageSendReply(m.ChannelID, messOut, m.Reference())
 			return
 		}
 
@@ -54,7 +54,7 @@ func MessageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	messOut := fmt.Sprintf(" ```\n%s\n```", out)
-	s.ChannelMessageSend(m.ChannelID, messOut)
+	s.ChannelMessageSendReply(m.ChannelID, messOut, m.Reference())
 
 }
 

@@ -72,6 +72,6 @@ func execute(path, args string) (string, error) {
 	if err != nil || ext != 0 {
 		return stdout + stderr, err
 	}
-	// utils.RemoveFile(path + ".class")
+
 	return stdout + stderr, nil
 }
