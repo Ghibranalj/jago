@@ -70,7 +70,7 @@ func execute(path, args string) (string, error) {
 	cmd := "java " + path + args
 	ext, err := utils.Command(cmd, &stdout, &stderr)
 	if err != nil || ext != 0 {
-		return stdout + stderr, err
+		return stdout + stderr, fmt.Errorf("%s", stderr)
 	}
 
 	return stdout + stderr, nil
