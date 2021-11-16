@@ -3,7 +3,7 @@ package compiler
 import "regexp"
 
 func getName(code string) string {
-	r := `class\s(?P<program>\S+)`
+	r := `class\s(?P<program>.+?)\s*{[\S\s]+}`
 	par := getParams(r, code)["program"]
 	return par
 }

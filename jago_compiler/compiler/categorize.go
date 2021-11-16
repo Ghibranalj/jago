@@ -12,7 +12,7 @@ const (
 
 // see the match in compiler_test.go
 var regex = []string{
-	"class\\s+[\\S]+\\s+{+[\\S\\s]+}",                              //FULL
+	`class\s+.+\s*{[\S\s]+}`, //FULL
 	"public\\s+static\\s+void\\s+main\\s{0,}\\(String\\[\\]\\s+.+", //Main Method
 	"[\\S\\s]", // singleton
 }

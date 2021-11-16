@@ -12,7 +12,7 @@ import (
 func Compile(code string) (string, error) {
 
 	cat := categorize(code)
-	_ = cat
+	fmt.Println(cat)
 	fileContent := complete(code, cat)
 
 	progName := getName(fileContent)
@@ -21,15 +21,13 @@ func Compile(code string) (string, error) {
 
 	javaFile := "./" + progName + ".java"
 	err := utils.WriteToFile(javaFile, fileContent)
+	defer utils.RemoveFile(javaFile)
 	if err != nil {
-
-		utils.RemoveFile(javaFile)
 		return "", err
 	}
 
 	err = javac(javaFile)
 
-	utils.RemoveFile(javaFile)
 	if err != nil {
 		return "", err
 	}

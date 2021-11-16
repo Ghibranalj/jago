@@ -27,7 +27,7 @@ var codes = []_code{
 	},
 	{
 		code: `
-		class program {
+		class Program {
 
 			public static void main (String[] args){
 				System.out.println(\"hello world\");
@@ -111,7 +111,7 @@ func TestComplete(t *testing.T) {
 }
 
 func TestRunJavac(t *testing.T) {
-	path := "./" + progName + ".java"
+	path := "./" + "program" + ".java"
 	utils.WriteToFile(path,
 		`class program {
 		public static void main(String[] argss){		
@@ -121,7 +121,7 @@ func TestRunJavac(t *testing.T) {
 
 	err := javac(path)
 	os.Remove(path)
-	os.Remove("./" + progName + ".class")
+	os.Remove("./" + "program" + ".class")
 	if err != nil {
 		t.Error(err.Error())
 	}
