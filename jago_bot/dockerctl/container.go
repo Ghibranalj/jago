@@ -3,6 +3,7 @@ package dockerctl
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -27,31 +28,27 @@ func Init() {
 
 }
 
-// var (
-// 	dPort    = 1234
-// 	usedPort = map[int]bool{}
-// )
+var usedPort = map[int]bool{}
 
-// func getPort() string {
-// 	port := dPort
+func getPort() string {
+	port := 1234
 
-// 	nFound := true
-// 	for nFound {
-// 		_, nFound = usedPort[port]
-// 		// fmt.Println(port, found)
-// 		port++
-// 	}
-// 	usedPort[port] = true
+	i := 0
 
-// 	return strconv.Itoa(port)
-// }
+	for {
+		_, ok := usedPort[port+i]
+		if !ok {
+			usedPort[port+i] = true
+			return strconv.Itoa(port + i)
+		}
+		i++
+	}
+}
 
 func SpinUp() (string, string, error) {
 
-	port := "1234"
-
-	fmt.Println(port)
-
+	port := getPort()
+	fmt.Println(usedPort)
 	resp, err := cli.ContainerCreate(ctx, &container.Config{
 		Image: "jago_compiler",
 		ExposedPorts: nat.PortSet{
@@ -79,6 +76,8 @@ func SpinUp() (string, string, error) {
 	return port, resp.ID, nil
 }
 
-func Kill(id string) error {
+func Kill(port, id string) error {
+	iPort, _ := strconv.Atoi(port)
+	delete(usedPort, iPort)
 	return cli.ContainerKill(ctx, id, "KILL")
 }
